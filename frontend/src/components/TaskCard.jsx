@@ -24,6 +24,7 @@ function isOverdue(value, status) {
 
 function TaskCard({ task, onUpdate, onDelete }) {
   const [isEditing, setIsEditing] = useState(false)
+  const [editFormKey, setEditFormKey] = useState(0)
   const [isSaving, setIsSaving] = useState(false)
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
   const formattedDueDate = useMemo(() => formatDate(task.due_date), [task.due_date])
@@ -72,6 +73,7 @@ function TaskCard({ task, onUpdate, onDelete }) {
 
   const closeEditModal = useCallback(() => {
     setIsEditing(false)
+    window.setTimeout(() => setEditFormKey((currentKey) => currentKey + 1), 200)
   }, [])
 
   const handleDelete = useCallback(async () => {
@@ -141,6 +143,16 @@ function TaskCard({ task, onUpdate, onDelete }) {
           </span>
         </div>
 
+        <div className="mobile-card-top">
+          <h3>
+            {overdue ? <span className="mobile-overdue-dot" aria-hidden="true"></span> : null}
+            {task.title}
+          </h3>
+          <span className={`due-date ${overdue ? 'due-date-overdue' : ''}`}>
+            {formattedDueDate}
+          </span>
+        </div>
+
         <h3>{task.title}</h3>
         <p>{task.description || 'No description provided.'}</p>
 
@@ -174,11 +186,13 @@ function TaskCard({ task, onUpdate, onDelete }) {
               {renderWorkflowActions()}
               <button type="button" className="button edit-button" onClick={() => setIsEditing(true)}>
                 <Pencil size={13} />
-                Edit
+                <span className="mobile-action-icon" aria-hidden="true">✏️</span>
+                <span className="action-label">Edit</span>
               </button>
               <button type="button" className="button delete-button" onClick={() => setIsConfirmingDelete(true)}>
                 <Trash2 size={13} />
-                Delete
+                <span className="mobile-action-icon" aria-hidden="true">🗑️</span>
+                <span className="action-label">Delete</span>
               </button>
             </m.div>
           )}
@@ -213,7 +227,7 @@ function TaskCard({ task, onUpdate, onDelete }) {
           </div>
 
           <TaskForm
-            key={`${task.id}-${isEditing}`}
+            key={`${task.id}-${editFormKey}`}
             task={task}
             onSubmit={handleUpdate}
             onCancel={closeEditModal}

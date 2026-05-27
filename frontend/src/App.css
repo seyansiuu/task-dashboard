@@ -192,6 +192,13 @@
   margin-top: 28px;
 }
 
+.mobile-summary,
+.mobile-card-top,
+.mobile-action-icon,
+.mobile-tab-bar {
+  display: none;
+}
+
 .search-field {
   position: relative;
   width: 100%;
@@ -846,7 +853,7 @@ textarea:focus {
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 768px) {
   .task-board,
   .skeleton-board {
     grid-template-columns: 1fr;
@@ -876,6 +883,356 @@ textarea:focus {
 
   .modal {
     padding: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    min-height: 52px;
+  }
+
+  .navbar-inner {
+    width: 100%;
+    min-height: 52px;
+    padding: 0 16px;
+    gap: 12px;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .header-actions {
+    width: auto;
+    justify-content: flex-end;
+  }
+
+  .brand {
+    gap: 8px;
+    font-size: 15px;
+  }
+
+  .brand-mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+  }
+
+  .brand-mark svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .task-count-pill {
+    display: none;
+  }
+
+  .primary {
+    border-radius: 9px;
+    font-size: 13px;
+    padding: 8px 14px;
+  }
+
+  .app-shell {
+    width: 100%;
+    padding: 0 0 80px;
+  }
+
+  .page-hero {
+    display: none;
+  }
+
+  .mobile-summary {
+    display: grid;
+    gap: 8px;
+    padding: 16px 16px 8px;
+  }
+
+  .mobile-summary h1 {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .mobile-summary .progress-summary {
+    display: flex;
+  }
+
+  .mobile-summary .progress-track {
+    height: 3px;
+  }
+
+  .task-controls {
+    margin: 0;
+    padding: 0 16px;
+  }
+
+  .task-controls .progress-summary {
+    display: none;
+  }
+
+  .search-field {
+    margin: 8px 0 12px;
+  }
+
+  .search-field input {
+    height: 40px;
+    border-radius: 10px;
+    font-size: 13px;
+    padding: 0 14px 0 42px;
+  }
+
+  .search-field span {
+    left: 15px;
+    font-size: 13px;
+  }
+
+  .task-board,
+  .skeleton-board {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    padding: 0 16px 80px;
+  }
+
+  .task-column {
+    display: none;
+    min-height: auto;
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
+    overflow: visible;
+    contain: none;
+  }
+
+  .task-column.is-active-mobile {
+    display: block;
+  }
+
+  .task-column::before,
+  .column-header {
+    display: none;
+  }
+
+  .task-card {
+    width: 100%;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    padding: 14px 16px;
+  }
+
+  .task-card-header {
+    display: none;
+  }
+
+  .mobile-card-top {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  .mobile-card-top h3 {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    gap: 7px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .mobile-overdue-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: #f87171;
+  }
+
+  .mobile-card-top .due-date {
+    flex: 0 0 auto;
+    color: #94a3b8;
+    font-size: 11px;
+  }
+
+  .task-card > h3 {
+    display: none;
+  }
+
+  .task-card > p {
+    max-width: calc(100% - 76px);
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .task-actions {
+    position: absolute;
+    right: 14px;
+    bottom: 12px;
+    gap: 6px;
+    margin: 0;
+  }
+
+  .start-button,
+  .done-button {
+    display: none;
+  }
+
+  .edit-button,
+  .delete-button {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    padding: 0;
+  }
+
+  .edit-button svg,
+  .delete-button svg,
+  .action-label {
+    display: none;
+  }
+
+  .mobile-action-icon {
+    display: inline;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .delete-confirmation {
+    position: relative;
+    inset: auto;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 12px;
+  }
+
+  .delete-confirmation .edit-button,
+  .delete-confirmation .confirm-delete-button {
+    width: auto;
+    height: 28px;
+    border-radius: 8px;
+    padding: 0 10px;
+  }
+
+  .column-empty {
+    min-height: 0;
+    padding: 40px 0;
+  }
+
+  .column-empty span {
+    font-size: 64px;
+  }
+
+  .column-empty p {
+    max-width: 240px;
+    font-size: 13px;
+  }
+
+  .global-empty-state {
+    margin: 16px;
+    padding: 40px 0;
+    min-height: 260px;
+  }
+
+  .empty-orbit {
+    width: 84px;
+    height: 84px;
+    font-size: 64px;
+    border: none;
+  }
+
+  .mobile-tab-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 64px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: #16161f;
+  }
+
+  .mobile-tab {
+    position: relative;
+    border: 0;
+    background: transparent;
+    color: #4b5563;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 0;
+  }
+
+  .mobile-tab::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 28px;
+    height: 2px;
+    border-radius: 0 0 999px 999px;
+    background: #a78bfa;
+    opacity: 0;
+  }
+
+  .mobile-tab.is-active {
+    color: #a78bfa;
+  }
+
+  .mobile-tab.is-active::before {
+    opacity: 1;
+  }
+
+  .modal-overlay {
+    align-items: end;
+    justify-items: stretch;
+    padding: 0;
+  }
+
+  .modal {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    max-height: 85vh;
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 40px;
+    transform: translateY(100%);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .modal::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    margin: 0 auto 20px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .modal-overlay.is-visible .modal {
+    transform: translateY(0);
   }
 }
 

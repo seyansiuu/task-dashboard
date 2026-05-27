@@ -21,6 +21,7 @@ function App() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [createFormKey, setCreateFormKey] = useState(0)
   const [searchQuery, setSearchQuery] = useState('')
+  const [activeMobileStatus, setActiveMobileStatus] = useState('Todo')
   const [error, setError] = useState('')
   const performanceMode = usePerformanceMode()
   const skeletonColumns = useMemo(() => Array.from({ length: 3 }, (_, columnIndex) => columnIndex), [])
@@ -208,6 +209,20 @@ function App() {
           <p>Plan, prioritize, and ship your work across a cinematic command board built for momentum.</p>
         </m.section>
 
+        <section className="mobile-summary">
+          <h1>My Tasks</h1>
+          <div className="progress-summary">
+            <p>
+              {tasks.length > 0 && completedCount === tasks.length
+                ? '✓ All tasks completed! 🎉'
+                : `${completedCount} of ${tasks.length} tasks completed`}
+            </p>
+            <div className="progress-track" aria-hidden="true">
+              <span style={{ '--progress-scale': progressScale }}></span>
+            </div>
+          </div>
+        </section>
+
         <m.section
           className="task-controls"
           initial={{ opacity: 0 }}
@@ -304,6 +319,8 @@ function App() {
             tasks={filteredTasks}
             totalTasks={tasks.length}
             searchQuery={searchQuery}
+            activeStatus={activeMobileStatus}
+            onStatusChange={setActiveMobileStatus}
             onUpdate={handleUpdateTask}
             onDelete={handleDeleteTask}
           />

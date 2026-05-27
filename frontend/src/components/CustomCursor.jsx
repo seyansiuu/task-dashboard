@@ -4,9 +4,10 @@ const INTERACTIVE_SELECTOR = 'button, .task-card'
 
 function CustomCursor({ enabled = true }) {
   const dotRef = useRef(null)
+  const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window
 
   useEffect(() => {
-    if (!enabled || !window.matchMedia('(pointer: fine)').matches) return undefined
+    if (!enabled || isTouchDevice || !window.matchMedia('(pointer: fine)').matches) return undefined
 
     const dot = dotRef.current
     if (!dot) return undefined
@@ -51,9 +52,9 @@ function CustomCursor({ enabled = true }) {
       window.removeEventListener('pointermove', handlePointerMove)
       document.documentElement.removeEventListener('mouseleave', handlePointerLeave)
     }
-  }, [enabled])
+  }, [enabled, isTouchDevice])
 
-  if (!enabled) return null
+  if (!enabled || isTouchDevice) return null
 
   return <div ref={dotRef} className="cursor-dot" />
 }

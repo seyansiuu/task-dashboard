@@ -4,13 +4,44 @@ import TaskCard from './TaskCard'
 import { columnReveal, staggerContainer } from '../lib/motion'
 
 const statusGroups = ['Todo', 'In Progress', 'Completed']
+const mobileTabs = [
+  { status: 'Todo', icon: '📋' },
+  { status: 'In Progress', icon: '⚡' },
+  { status: 'Completed', icon: '✅' },
+]
 const emptyState = {
   Todo: { icon: '📋', text: 'No tasks waiting in the queue.' },
   'In Progress': { icon: '⚡', text: 'Nothing is actively moving right now.' },
   Completed: { icon: '✅', text: 'Completed work will land here.' },
 }
 
-function TaskList({ tasks, totalTasks = tasks.length, searchQuery = '', onUpdate, onDelete }) {
+function MobileTabBar({ activeStatus, onStatusChange }) {
+  return (
+    <nav className="mobile-tab-bar" aria-label="Task status">
+      {mobileTabs.map((tab) => (
+        <button
+          type="button"
+          className={`mobile-tab ${activeStatus === tab.status ? 'is-active' : ''}`}
+          key={tab.status}
+          onClick={() => onStatusChange?.(tab.status)}
+        >
+          <span aria-hidden="true">{tab.icon}</span>
+          <span>{tab.status}</span>
+        </button>
+      ))}
+    </nav>
+  )
+}
+
+function TaskList({
+  tasks,
+  totalTasks = tasks.length,
+  searchQuery = '',
+  activeStatus = 'Todo',
+  onStatusChange,
+  onUpdate,
+  onDelete,
+}) {
   const tasksByStatus = useMemo(
     () =>
       statusGroups.reduce((groups, status) => {
@@ -22,83 +53,93 @@ function TaskList({ tasks, totalTasks = tasks.length, searchQuery = '', onUpdate
 
   if (tasks.length === 0 && totalTasks === 0) {
     return (
-      <m.div
-        className="empty-state global-empty-state"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <span className="empty-orbit">📋</span>
-        <strong>No tasks yet</strong>
-        <p>Create your first task and start shaping the queue.</p>
-      </m.div>
+      <>
+        <m.div
+          className="empty-state global-empty-state"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <span className="empty-orbit">📋</span>
+          <strong>No tasks yet</strong>
+          <p>Create your first task and start shaping the queue.</p>
+        </m.div>
+        <MobileTabBar activeStatus={activeStatus} onStatusChange={onStatusChange} />
+      </>
     )
   }
 
   if (tasks.length === 0 && searchQuery.trim()) {
     return (
-      <m.div className="empty-state global-empty-state no-results-state" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-        <span className="empty-orbit">🔍</span>
-        <strong>No results for {searchQuery}</strong>
-        <p>Try a different title or clear the search field.</p>
-      </m.div>
+      <>
+        <m.div className="empty-state global-empty-state no-results-state" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+          <span className="empty-orbit">🔍</span>
+          <strong>No results for {searchQuery}</strong>
+          <p>Try a different title or clear the search field.</p>
+        </m.div>
+        <MobileTabBar activeStatus={activeStatus} onStatusChange={onStatusChange} />
+      </>
     )
   }
 
   return (
-    <m.div
-      className="task-board"
-      variants={staggerContainer}
-      initial="hidden"
-      animate="visible"
-    >
-      {statusGroups.map((status, index) => {
-        const groupedTasks = tasksByStatus[status]
-        const empty = emptyState[status]
+    <>
+      <m.div
+        className="task-board"
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        {statusGroups.map((status, index) => {
+          const groupedTasks = tasksByStatus[status]
+          const empty = emptyState[status]
 
-        return (
-          <m.section
-            className={`task-column column-${status.replaceAll(' ', '-').toLowerCase()}`}
-            key={status}
-            variants={columnReveal}
-            custom={index}
-          >
-            <div className="column-header">
-              <div className="column-title">
-                <span className="column-dot"></span>
-                <h2>{status}</h2>
+          return (
+            <m.section
+              className={`task-column column-${status.replaceAll(' ', '-').toLowerCase()} ${status === activeStatus ? 'is-active-mobile' : ''}`}
+              key={status}
+              variants={columnReveal}
+              custom={index}
+            >
+              <div className="column-header">
+                <div className="column-title">
+                  <span className="column-dot"></span>
+                  <h2>{status}</h2>
+                </div>
+                <span>{groupedTasks.length}</span>
               </div>
-              <span>{groupedTasks.length}</span>
-            </div>
 
-            <div className="task-stack">
-              <AnimatePresence initial={false}>
-                {groupedTasks.length > 0 ? (
-                groupedTasks.map((task) => (
-                  <TaskCard
-                    key={task.id}
-                    task={task}
-                    onUpdate={onUpdate}
-                    onDelete={onDelete}
-                  />
-                ))
-              ) : (
-                <m.div
-                  className="column-empty"
-                  key={`${status}-empty`}
-                  initial={{ opacity: 0, scale: 0.97 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.97 }}
-                >
-                  <span>{empty.icon}</span>
-                  <p>{empty.text}</p>
-                </m.div>
-              )}
-              </AnimatePresence>
-            </div>
-          </m.section>
-        )
-      })}
-    </m.div>
+              <div className="task-stack">
+                <AnimatePresence initial={false}>
+                  {groupedTasks.length > 0 ? (
+                    groupedTasks.map((task) => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        onUpdate={onUpdate}
+                        onDelete={onDelete}
+                      />
+                    ))
+                  ) : (
+                    <m.div
+                      className="column-empty"
+                      key={`${status}-empty`}
+                      initial={{ opacity: 0, scale: 0.97 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.97 }}
+                    >
+                      <span>{empty.icon}</span>
+                      <p>{empty.text}</p>
+                    </m.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </m.section>
+          )
+        })}
+      </m.div>
+
+      <MobileTabBar activeStatus={activeStatus} onStatusChange={onStatusChange} />
+    </>
   )
 }
 
